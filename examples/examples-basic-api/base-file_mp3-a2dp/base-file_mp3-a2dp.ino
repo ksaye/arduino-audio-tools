@@ -1,76 +1,65 @@
 /**
- * @file file_mp3-a2dp.ino
+ * @file file_raw-serial.ino
  * @author Phil Schatzmann
- * @brief We read some audio with the ESP8266-Audio Library and send it to a Bluetooth Speaker
- * 
+ * @brief see https://github.com/pschatzmann/arduino-audio-tools/blob/main/examples/file_mp3-a2dp/README.md
+ * Compile as Hughe App
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
 
-#include <SPI.h>
-#include <SD.h>
-#include "AudioFileSourceSD.h"
-#include "AudioGeneratorMP3.h"
+#include <Arduino.h>
 #include "BluetoothA2DPSource.h"
 #include "AudioTools.h"
-#include "AudioLibs/AudioESP8266.h"
+#include "AudioCodecs/CodecMP3Helix.h"
+#include <SPI.h>
+#include <SD.h>
 
-
+const char* file_name = "/test/002.mp3";
 const int sd_ss_pin = 5;
-const char* fileName = "/audio.mp3";
-BluetoothA2DPSource a2dp_source;
-AudioFileSourceSD *file=nullptr;
-AudioGeneratorMP3 *mp3=nullptr;
-AudioOutputWithCallback *out=nullptr;
-volatile float volume = 1.0;  // you can update this value to change the volue
-
+File sound_file;
+DecoderStream input{new NBuffer<uint8_t>(512,30)};  //mp3 needs quite a large buffer
+VolumeStream volume(input); // volume control
+BluetoothA2DPSource a2dp_source; // a2dp sender
+MP3DecoderHelix helix; // mp3 decoder
 
 // callback used by A2DP to provide the sound data
-int32_t get_sound_data(Frame* data, int32_t len) {  
-  // get data
-  if (out == nullptr) return 0;
-  int32_t result = out->read(data, len);
-  // set volume
-  for (int j=0;j<len;j++){
-    data[j].channel1 = data[j].channel1 * volume;
-    data[j].channel2 = data[j].channel2 * volume;
-  }
-  return result;
+int32_t get_sound_data(Frame* data, int32_t fameCount) {
+    const int frame_size = 4;
+    // read decoded bytes
+    return volume.readBytes((uint8_t*)data, fameCount*frame_size) / frame_size;   
 }
-
 
 // Arduino Setup
 void setup(void) {
   Serial.begin(115200);
-  audioLogger = &Serial;
+  AudioLogger::instance().begin(Serial,AudioLogger::Info);
+  Serial.println("starting...");
 
-  // Setup Audio
-  file = new AudioFileSourceSD(); 
-  mp3 = new AudioGeneratorMP3();
-  out = new AudioOutputWithCallback(512,5);
-  
-  // Open MP3 file and play it
+  // Setup SD and open file
   SD.begin(sd_ss_pin);
-  if (file->open(fileName)) {
-    
-    // start the bluetooth
-    Serial.println("starting A2DP...");
-    a2dp_source.start("MyMusic", get_sound_data);  
-
-    // start to play the file
-    mp3->begin(file, out);
-    Serial.printf("Playback of '%s' begins...\n", fileName);
-  } else {
-    Serial.println("Can't find .mp3 file");
+  sound_file = SD.open(file_name, FILE_READ);
+  if (!sound_file){
+    Serial.println("file open error");
+    return;
   }
+
+  auto cfg = volume.defaultConfig();
+  cfg.bits_per_sample = 16;
+  cfg.channels = 2;
+  volume.begin(cfg); 
+  volume.setVolume(0.3);
+
+  // open decoded stream
+  input.begin(sound_file, helix);
+
+  // start the bluetooth
+  Serial.println("starting A2DP...");
+  a2dp_source.set_auto_reconnect(false);
+  a2dp_source.start("LEXON MINO L", get_sound_data);  
+  Serial.println("started");
 }
 
 // Arduino loop - repeated processing 
 void loop() {
-  if (mp3->isRunning()) {
-    if (!mp3->loop()) mp3->stop();
-  } else {
-    Serial.println("MP3 done");
-    delay(10000);
-  }
+  input.copy();
 }

@@ -14,11 +14,10 @@ namespace audio_tools {
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
-class AudioOutputWithCallback : public AudioOutput, public BufferedStream {
+class AudioOutputWithCallback : public AudioOutput, public AudioStreamX {
  public:
   // Default constructor
-  AudioOutputWithCallback(int bufferSize, int bufferCount)
-      : BufferedStream(bufferSize) {
+  AudioOutputWithCallback(int bufferSize, int bufferCount) {
     callback_buffer_ptr = new NBuffer<Frame>(bufferSize, bufferCount);
   }
 
@@ -49,18 +48,17 @@ class AudioOutputWithCallback : public AudioOutput, public BufferedStream {
     return active ? this->callback_buffer_ptr->readArray(src, len) : 0;
   }
 
- protected:
-  NBuffer<Frame> *callback_buffer_ptr;
-  bool active;
-
-  virtual size_t writeExt(const uint8_t *data, size_t len) {
+  virtual size_t write(const uint8_t *data, size_t len) {
     return callback_buffer_ptr->writeArray((Frame *)data, len / sizeof(Frame));
   }
 
-  virtual size_t readExt(uint8_t *data, size_t len) {
+  virtual size_t readBytes(uint8_t *data, size_t len) {
     return callback_buffer_ptr->readArray((Frame *)data, len / sizeof(Frame));
-    ;
   }
+
+ protected:
+  NBuffer<Frame> *callback_buffer_ptr;
+  bool active;
 };
 
 /**

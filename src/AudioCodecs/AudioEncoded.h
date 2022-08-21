@@ -4,6 +4,7 @@
 #include "AudioTools/AudioOutput.h"
 #include "AudioTools/AudioStreams.h"
 #include "AudioTools/AudioTypes.h"
+#include "AudioTools/AudioCopy.h"
 #include "Stream.h"
 
 namespace audio_tools {
@@ -359,6 +360,165 @@ protected:
   int write_buffer_pos = 0;
   const int write_buffer_size = 256;
   bool active;
+};
+
+/**
+ * @brief Provides the functionality to read decoded data from a encoded
+ * data source. This class is less memory efficient then the EncodedAudioStream 
+ * which writes decoded data to a final stream, but in some cases this is worth the price. If the buffer is too small you
+ * can increase it by calling the resize() method.
+ * 
+ */
+class DecoderStream : public AudioStreamX {
+public:
+  DecoderStream() = default;
+
+    /// Assigns a potentially biffer buffer
+  DecoderStream(BaseBuffer<uint8_t> *newBuffer){
+    LOGI(LOG_METHOD);
+    setBuffer(newBuffer);
+  }
+
+  /// Constructor for AudioStream with automatic notification of audio changes
+  DecoderStream(Stream &inputStream, AudioDecoder &decoder) {
+    LOGD(LOG_METHOD);
+    ptr_in = &inputStream;
+    decoder_ptr = &decoder;
+    active = false;
+  }
+
+  DecoderStream(Stream *inputStream, AudioDecoder *decoder) {
+    LOGD(LOG_METHOD);
+    ptr_in = inputStream;
+    decoder_ptr = decoder;
+    active = false;
+  }
+
+  bool begin(Stream &inputStream, AudioDecoder &decoder) {
+    LOGD(LOG_METHOD);
+    ptr_in = &inputStream;
+    decoder_ptr = &decoder;
+    return begin();
+  }
+
+  bool begin(Stream *inputStream, AudioDecoder *decoder) {
+    LOGD(LOG_METHOD);
+    ptr_in = inputStream;
+    decoder_ptr = decoder;
+    return begin();
+  }
+
+  bool begin() {
+    LOGD(LOG_METHOD);
+    if (ptr_in==nullptr) return false;
+    dec_stream.begin(&buffer_blocking, decoder_ptr);
+    if (p_notify!=nullptr){
+      dec_stream.setNotifyAudioChange(*p_notify);
+    }
+    copier.begin(dec_stream, *ptr_in);
+    buffer.begin();
+    // fill with initial data
+    if (auto_load){
+      refill();
+    }
+    active = true;
+    return active ;
+  }
+
+  void end() {
+    LOGD(LOG_METHOD);
+    buffer.end();
+    active = false;
+  }
+
+  size_t readBytes(uint8_t *data, size_t len){
+    if (!active) return 0;
+    size_t result = buffer.readBytes(data, len);
+    if (auto_load && result==0){
+      refill();
+      result = buffer.readBytes(data, len);
+    }
+
+    if (result==0){
+      LOGW("readBytes: %d", result);
+    }
+
+    return result;
+  }
+
+  int available() {
+    size_t result = buffer.available();
+    if (auto_load && result==0){
+      refill();
+      result = buffer.available();
+    }
+    return result;
+  }
+
+  void setNotifyAudioChange(AudioBaseInfoDependent &bi) override {
+    p_notify = &bi;
+    dec_stream.decoder().setNotifyAudioChange(bi);
+  }
+
+  AudioBaseInfo audioInfo() {
+    return dec_stream.decoder().audioInfo();
+  }
+
+  operator bool() {
+    return active && available()>0;
+  }
+
+  bool isEmpty() {
+    return buffer.isEmpty();
+  }
+
+  /// Assigns a potentially biffer buffer
+  void setBuffer(BaseBuffer<uint8_t> *newBuffer){
+    LOGI(LOG_METHOD);
+    buffer.setBuffer(newBuffer);
+  }
+
+  /// Refills buffer)
+  bool copy() {
+    LOGD(LOG_METHOD);
+    bool data_available = false;
+    if (buffer.availableForWrite()>0){
+      copier.copy();
+      int len = buffer.available();
+      LOGD("buffer: %d", len);
+      if (len>0){
+        data_available = true;
+      }
+    } else {
+      yield();
+    }
+    return data_available;
+  }
+
+  // automatically reloads the pcm buffer if it is empty
+  void setAutoReload(bool flag){
+    auto_load = flag;
+  }
+
+protected:
+  // ExternalBufferStream ext_buffer;
+  AudioDecoder *decoder_ptr = nullptr; // decoder
+  Stream *ptr_in = nullptr;
+  EncodedAudioStream dec_stream;
+  BufferedStream buffer{512,20};
+  BlockingStream buffer_blocking{buffer, 2000};
+  StreamCopy copier;
+  bool active;
+  bool auto_load = true;
+  AudioBaseInfoDependent *p_notify=nullptr;
+
+  void refill() {
+    while(buffer.available()==0 && buffer.availableForWrite()>0){
+      copier.copy();
+    }
+  }
+
+
 };
 
 } // namespace audio_tools

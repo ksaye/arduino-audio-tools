@@ -532,110 +532,32 @@ class GeneratedSoundStream : public AudioStreamX {
 };
 
 /**
- * @brief The Arduino Stream supports operations on single characters. This is
- * usually not the best way to push audio information, but we will support it
- * anyway - by using a buffer. On reads: if the buffer is empty it gets refilled
- * - for writes if it is full it gets flushed.
- * @author Phil Schatzmann
- * @copyright GPLv3
- */
-class BufferedStream : public AudioStream {
- public:
-  BufferedStream(size_t buffer_size) {
-    LOGD(LOG_METHOD);
-    buffer = new SingleBuffer<uint8_t>(buffer_size);
-  }
-
-  ~BufferedStream() {
-    LOGD(LOG_METHOD);
-    if (buffer != nullptr) {
-      delete buffer;
-    }
-  }
-
-  /// writes a byte to the buffer
-  virtual size_t write(uint8_t c) override {
-    if (buffer->isFull()) {
-      flush();
-    }
-    return buffer->write(c);
-  }
-
-  /// Use this method: write an array
-  virtual size_t write(const uint8_t *data, size_t len) override {
-    LOGD("%s: %zu", LOG_METHOD, len);
-    flush();
-    return writeExt(data, len);
-  }
-
-  /// empties the buffer
-  virtual void flush() override                                            {
-    // just dump the memory of the buffer and clear it
-    if (buffer->available() > 0) {
-      writeExt(buffer->address(), buffer->available());
-      buffer->reset();
-    }
-  }
-
-  /// reads a byte - to be avoided
-  virtual int read() override {
-    if (buffer->isEmpty()) {
-      refill();
-    }
-    return buffer->read();
-  }
-
-  /// peeks a byte - to be avoided
-  virtual int peek() override{
-    if (buffer->isEmpty()) {
-      refill();
-    }
-    return buffer->peek();
-  };
-
-  /// Use this method !!
-  size_t readBytes(uint8_t *data, size_t length) override {
-    if (buffer->isEmpty()) {
-      return readExt(data, length);
-    } else {
-      return buffer->readArray(data, length);
-    }
-  }
-
-  /// Returns the available bytes in the buffer: to be avoided
-  virtual int available() override {
-    if (buffer->isEmpty()) {
-      refill();
-    }
-    return buffer->available();
-  }
-
-  /// Clears all the data in the buffer
-  void clear() { buffer->reset(); }
-
- protected:
-  SingleBuffer<uint8_t> *buffer = nullptr;
-
-  // refills the buffer with data from i2s
-  void refill() {
-    size_t result = readExt(buffer->address(), buffer->size());
-    buffer->setAvailable(result);
-  }
-
-  virtual size_t writeExt(const uint8_t *data, size_t len) = 0;
-  virtual size_t readExt(uint8_t *data, size_t length) = 0;
-};
-
-/**
  * @brief The Arduino Stream which provides silence and simulates a null device
  * when used as audio target
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
-class NullStream : public BufferedStream {
+class NullStream : public AudioStreamX {
  public:
-  NullStream(bool measureWrite = false) : BufferedStream(100) {
+  NullStream(bool measureWrite = false)  {
     is_measure = measureWrite;
+  }
+
+  virtual size_t write(const uint8_t *data, size_t len) override {
+    if (is_measure) {
+      if (millis() < timeout) {
+        total += len;
+      } else {
+        LOGI("Thruput = %zu kBytes/sec", total / 1000);
+        total = 0;
+        timeout = millis() + 1000;
+      }
+    }
+    return len;
+  }
+  virtual size_t readBytes(uint8_t *data, size_t len) override {
+    memset(data, 0, len);
+    return len;
   }
 
   bool begin(AudioBaseInfo info, int opt = 0) {    
@@ -656,123 +578,100 @@ class NullStream : public BufferedStream {
   size_t total = 0;
   unsigned long timeout = 0;
   bool is_measure;
-
-  virtual size_t writeExt(const uint8_t *data, size_t len) override {
-    if (is_measure) {
-      if (millis() < timeout) {
-        total += len;
-      } else {
-        LOGI("Thruput = %zu kBytes/sec", total / 1000);
-        total = 0;
-        timeout = millis() + 1000;
-      }
-    }
-    return len;
-  }
-  virtual size_t readExt(uint8_t *data, size_t len) override {
-    memset(data, 0, len);
-    return len;
-  }
 };
 
 /**
- * @brief A Stream backed by a Ringbuffer. We can write to the end and read from
- * the beginning of the stream
+ * @brief Implements a blocking write where the write is blocking until all data
+ * has been written
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
-class RingBufferStream : public AudioStream {
- public:
-  RingBufferStream(int size = DEFAULT_BUFFER_SIZE) {
-    buffer = new RingBuffer<uint8_t>(size);
-  }
-
-  ~RingBufferStream() {
-    if (buffer != nullptr) {
-      delete buffer;
+class BlockingStream : public AudioStreamX {
+  public:
+    BlockingStream(Print &print, int timeOut = -1){
+      p_print = &print;
+      timeout = timeOut;
+      
     }
-  }
+    BlockingStream(Stream &stream, int timeOut = -1){
+      p_print = &stream;
+      p_stream = &stream;;
+      timeout = timeOut;
+    }
 
-  virtual int available() override {
-    // LOGD("RingBufferStream::available: %zu",buffer->available());
-    return buffer->available();
-  }
+    int availableForWrite() {
+      return p_print->availableForWrite();
+    }
 
-  virtual void flush() override {}
-  virtual int peek() override { return buffer->peek(); }
-  virtual int read() override { return buffer->read(); }
+    virtual size_t readBytes(uint8_t *data, size_t len) override {
+      return p_stream==nullptr ? 0 : p_stream->readBytes(data, len);
+    }
 
-  virtual size_t readBytes(uint8_t *data, size_t length) override {
-    return buffer->readArray(data, length);
-  }
+    virtual size_t write(const uint8_t *data, size_t len) override {
+      int open = len;
+      int total = 0;
+      uint64_t end = millis()+timeout;
+      while(open>0){
+        while (availableForWrite()==0){
+          delay(100);
+        }
+        int written = p_print->write(data+total, open);
+        open-=written;
+        total+=written;
 
-  virtual size_t write(const uint8_t *data, size_t len) override {
-    // LOGD("RingBufferStream::write: %zu",len);
-    return buffer->writeArray(data, len);
-  }
+        if (timeout!=-1 && millis()>end){
+          LOGW("write timeout")
+          break;
+        }
 
-  virtual size_t write(uint8_t c) override { return buffer->write(c); }
+      }
+      return total;
+    }
 
- protected:
-  RingBuffer<uint8_t> *buffer = nullptr;
+    int available() {
+      return p_stream==nullptr ? 0 : p_stream->available();
+    }
+
+  protected:
+    Print *p_print=nullptr;
+    Stream *p_stream=nullptr;
+    int timeout=-1;
+
 };
 
 /**
- * @brief A Stream backed by a SingleBufferStream. We assume that the memory is
- * externally allocated and that we can submit only full buffer records, which
- * are then available for reading.
+ * @brief AudioStream class which stores the data in a temporary queue buffer.
+ * The queue can be consumed e.g. by a callback function by calling readBytes();
  *
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
-class ExternalBufferStream : public AudioStream {
- public:
-  ExternalBufferStream() { LOGD(LOG_METHOD); }
-
-  virtual int available() override { return buffer.available(); }
-
-  virtual void flush() override {}
-
-  virtual int peek() override { return buffer.peek(); }
-
-  virtual int read() override { return buffer.read(); }
-
-  virtual size_t readBytes(uint8_t *data, size_t length) override {
-    return buffer.readArray(data, length);
-  }
-
-  virtual size_t write(const uint8_t *data, size_t len) override {
-    buffer.onExternalBufferRefilled((void *)data, len);
-    return len;
-  }
-
-  virtual size_t write(uint8_t c) override {
-    LOGE("not implemented: %s", LOG_METHOD);
-    return 0;
-  }
-
- protected:
-  SingleBuffer<uint8_t> buffer;
-};
-
-/**
- * @brief AudioOutput class which stores the data in a temporary queue buffer.
- * The queue can be consumed e.g. by a callback function by calling readBytes();
-
- * @author Phil Schatzmann
- * @copyright GPLv3
- */
 template <class T>
-class CallbackBufferedStream : public AudioStreamX {
+class BufferedStreamT : public AudioStreamX {
  public:
-  // Default constructor
-  CallbackBufferedStream(int bufferSize, int bufferCount, bool autoRemoveOldestDataIfFull=false)
+  /// Default constructor
+  BufferedStreamT(int bufferSize, int bufferCount, bool autoRemoveOldestDataIfFull=false)
       : AudioStreamX() {
-    callback_buffer_ptr = new NBuffer<T>(bufferSize, bufferCount);
+    p_buffer = new NBuffer<T>(bufferSize, bufferCount);
     remove_oldest_data = autoRemoveOldestDataIfFull;
   }
 
-  virtual ~CallbackBufferedStream() { delete callback_buffer_ptr; }
+  BufferedStreamT(BaseBuffer<T> *newBuffer, bool autoRemoveOldestDataIfFull=false){
+    remove_oldest_data = autoRemoveOldestDataIfFull;
+    setBuffer(newBuffer);
+  }
+
+
+  /// Destructor
+  virtual ~BufferedStreamT() { delete p_buffer; }
+
+  /// Assigns a new buffer
+  void setBuffer(BaseBuffer<T> *newBuffer){
+    if (p_buffer != nullptr) {
+      delete p_buffer;
+    }
+    p_buffer = newBuffer;
+  }
 
   /// Activates the output
   virtual bool begin() {
@@ -788,38 +687,58 @@ class CallbackBufferedStream : public AudioStreamX {
   };
 
   int available() {
-    return callback_buffer_ptr->available()*sizeof(T);
+    return p_buffer->available()*sizeof(T);
   }
 
   int availableForWrite() {
-    return callback_buffer_ptr->availableForWrite()*sizeof(T);
+    return p_buffer->availableForWrite()*sizeof(T);
   }
 
   virtual size_t write(const uint8_t *data, size_t len) override {
+    LOGD("write: %d %s", len, active?"":" - inactive");
     if (!active) return len;
-
     // make space by deleting oldest entries
-    int available_bytes = callback_buffer_ptr->availableForWrite()*sizeof(T);
+    int available_bytes = p_buffer->availableForWrite()*sizeof(T);
     if (remove_oldest_data && len>available_bytes){
+      LOGI("Overflow - removing oldest data");
       int gap = len-available_bytes;
       uint8_t tmp[gap];
       readBytes(tmp, gap);
     }
 
-    return callback_buffer_ptr->writeArray(data, len / sizeof(T));
+    return p_buffer->writeArray(data, len / sizeof(T));
   }
 
   virtual size_t readBytes(uint8_t *data, size_t len) override {
+    LOGD("readBytes: %d %s", len, active?"":" - inactive");
     if (!active) return 0;
-    return callback_buffer_ptr->readArray(data, len / sizeof(T));
-    ;
+    return p_buffer->readArray(data, len / sizeof(T));
+  }
+
+  bool isEmpty() {
+    return p_buffer==nullptr || p_buffer->isEmpty();
   }
 
  protected:
-  NBuffer<T> *callback_buffer_ptr;
+  BaseBuffer<T> *p_buffer = nullptr;
   bool active;
   bool remove_oldest_data;
 
+};
+
+
+/**
+ * Reading and writing to a byte buffer
+ * @author Phil Schatzmann
+ * @copyright GPLv3
+ */
+class BufferedStream : public BufferedStreamT<uint8_t> {
+ public:
+  BufferedStream(size_t buffer_size, size_t buffer_count=1, bool autoRemoveOldestDataIfFull=false) : BufferedStreamT<uint8_t>(buffer_size,buffer_count, autoRemoveOldestDataIfFull)  {}
+  BufferedStream(BaseBuffer<uint8_t> *newBuffer, bool autoRemoveOldestDataIfFull=false): BufferedStreamT<uint8_t>(newBuffer, autoRemoveOldestDataIfFull) {}
+  void setBuffer(BaseBuffer<uint8_t> *newBuffer){
+    BufferedStreamT::setBuffer(newBuffer);
+  }
 };
 
 /**
@@ -1488,6 +1407,36 @@ class TimerCallbackAudioStream : public BufferedStream {
     active = false;
   }
 
+  // used for audio sink
+  virtual size_t write(const uint8_t *data, size_t len) override {
+    if (!active) return 0;
+    LOGD(LOG_METHOD);
+    size_t result = 0;
+    if (!cfg.use_timer) {
+      result = frameCallback((uint8_t *)data, len);
+    } else {
+      result = buffer->writeArray((uint8_t *)data, len);
+    }
+    if (++printCount % 10000 == 0) printSampleRate();
+    return result;
+  }
+
+  // used for audio source
+  virtual size_t readBytes(uint8_t *data, size_t len) override {
+    if (!active) return 0;
+    LOGD(LOG_METHOD);
+
+    size_t result = 0;
+    if (!cfg.use_timer) {
+      result = frameCallback(data, len);
+    } else {
+      result = buffer->readArray(data, len);
+    }
+    if (++printCount % 10000 == 0) printSampleRate();
+    return result;
+  }
+
+
   /// Provides the effective sample rate
   uint16_t currentSampleRate() { return currentRateValue; }
 
@@ -1506,34 +1455,6 @@ class TimerCallbackAudioStream : public BufferedStream {
   uint32_t currentRateValue = 0;
   uint32_t printCount = 0;
 
-  // used for audio sink
-  virtual size_t writeExt(const uint8_t *data, size_t len) override {
-    if (!active) return 0;
-    LOGD(LOG_METHOD);
-    size_t result = 0;
-    if (!cfg.use_timer) {
-      result = frameCallback((uint8_t *)data, len);
-    } else {
-      result = buffer->writeArray((uint8_t *)data, len);
-    }
-    if (++printCount % 10000 == 0) printSampleRate();
-    return result;
-  }
-
-  // used for audio source
-  virtual size_t readExt(uint8_t *data, size_t len) override {
-    if (!active) return 0;
-    LOGD(LOG_METHOD);
-
-    size_t result = 0;
-    if (!cfg.use_timer) {
-      result = frameCallback(data, len);
-    } else {
-      result = buffer->readArray(data, len);
-    }
-    if (++printCount % 10000 == 0) printSampleRate();
-    return result;
-  }
 
   /// calculates the effective sample rate
   virtual void measureSampleRate() {
