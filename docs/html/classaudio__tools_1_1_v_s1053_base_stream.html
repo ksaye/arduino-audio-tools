@@ -95,9 +95,9 @@ Inheritance diagram for audio_tools::VS1053BaseStream:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad32c2369fac603c04347680485c16d05"><td class="memItemLeft" align="right" valign="top"><a id="ad32c2369fac603c04347680485c16d05" name="ad32c2369fac603c04347680485c16d05"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VS1053BaseStream</b> (uint8_t _cs_pin, uint8_t _dcs_pin, uint8_t _dreq_pin, int16_t _reset_pin=-1)</td></tr>
-<tr class="separator:ad32c2369fac603c04347680485c16d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac2945ccf3e92237ef969a0cacf1dba"><td class="memItemLeft" align="right" valign="top"><a id="aeac2945ccf3e92237ef969a0cacf1dba" name="aeac2945ccf3e92237ef969a0cacf1dba"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>VS1053BaseStream</b> (uint8_t _cs_pin, uint8_t _dcs_pin, uint8_t _dreq_pin, int16_t _reset_pin=-1, bool startSPI=true)</td></tr>
+<tr class="separator:aeac2945ccf3e92237ef969a0cacf1dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc4116ef5c25231a47aeb9dbd2226ed3"><td class="memItemLeft" align="right" valign="top"><a id="acc4116ef5c25231a47aeb9dbd2226ed3" name="acc4116ef5c25231a47aeb9dbd2226ed3"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>balance</b> ()</td></tr>
 <tr class="memdesc:acc4116ef5c25231a47aeb9dbd2226ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the currenet balance setting (-1.0..1.0) <br /></td></tr>
@@ -117,10 +117,10 @@ VS1053 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVS1053</b>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBalance</b> (float bal)</td></tr>
 <tr class="memdesc:ad011a5331dd5e4e5963a27d5aef74e21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusting the left and right volume balance, higher to enhance the right side, lower to enhance the left side. <br /></td></tr>
 <tr class="separator:ad011a5331dd5e4e5963a27d5aef74e21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecb133fe2852d46b280fe3c231daf2c2"><td class="memItemLeft" align="right" valign="top"><a id="aecb133fe2852d46b280fe3c231daf2c2" name="aecb133fe2852d46b280fe3c231daf2c2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setBass</b> (float value)</td></tr>
-<tr class="memdesc:aecb133fe2852d46b280fe3c231daf2c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bass amplitude value (range 0 to 1.0) <br /></td></tr>
-<tr class="separator:aecb133fe2852d46b280fe3c231daf2c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aa43a8a2320c70c59c3e0c2c2306c25"><td class="memItemLeft" align="right" valign="top"><a id="a9aa43a8a2320c70c59c3e0c2c2306c25" name="a9aa43a8a2320c70c59c3e0c2c2306c25"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setBass</b> (float val)</td></tr>
+<tr class="memdesc:a9aa43a8a2320c70c59c3e0c2c2306c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bass amplitude value (range 0 to 1.0) <br /></td></tr>
+<tr class="separator:a9aa43a8a2320c70c59c3e0c2c2306c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3ab9b445ee62d9b9cb4fc465fdc81ce"><td class="memItemLeft" align="right" valign="top"><a id="ae3ab9b445ee62d9b9cb4fc465fdc81ce" name="ae3ab9b445ee62d9b9cb4fc465fdc81ce"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBassFrequencyLimit</b> (uint16_t value)</td></tr>
 <tr class="memdesc:ae3ab9b445ee62d9b9cb4fc465fdc81ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bass frequency limit in hz (range 0 to 15000) <br /></td></tr>
@@ -376,6 +376,9 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_dreq_pin</b></td>
 <tr class="memitem:ae6d246fcebcf1849bf56d4a9f97dcac9"><td class="memItemLeft" align="right" valign="top"><a id="ae6d246fcebcf1849bf56d4a9f97dcac9" name="ae6d246fcebcf1849bf56d4a9f97dcac9"></a>
 int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_reset_pin</b> =-1</td></tr>
 <tr class="separator:ae6d246fcebcf1849bf56d4a9f97dcac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef3285c48e59b78fe886078ce785fb6e"><td class="memItemLeft" align="right" valign="top"><a id="aef3285c48e59b78fe886078ce785fb6e" name="aef3285c48e59b78fe886078ce785fb6e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_start_SPI</b></td></tr>
+<tr class="separator:aef3285c48e59b78fe886078ce785fb6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d4b409a0b64b57e71c0e3f8d04196f7"><td class="memItemLeft" align="right" valign="top"><a id="a2d4b409a0b64b57e71c0e3f8d04196f7" name="a2d4b409a0b64b57e71c0e3f8d04196f7"></a>
 VS1053 *&#160;</td><td class="memItemRight" valign="bottom"><b>p_vs1053</b> = nullptr</td></tr>
 <tr class="separator:a2d4b409a0b64b57e71c0e3f8d04196f7"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -7,6 +7,5 @@ var searchData=
   ['inband_5ffec_4',['inband_fec',['../structaudio__tools_1_1_opus_encoder_settings.html#a2f8c37490c23d3996e8ca8bc5158b094',1,'audio_tools::OpusEncoderSettings']]],
   ['internal_5fpi_5',['internal_Pi',['../classaudio__tools_1_1_simple_flanger.html#aca682b833466709f28b2b812e8b232dd',1,'audio_tools::SimpleFlanger']]],
   ['interpolationtable_6',['interpolationTable',['../namespaceaudio__tools.html#a424ce2a93eb3e556936b3089d93bc217',1,'audio_tools']]],
-  ['invdelayincrement_7',['invDelayIncrement',['../classaudio__tools_1_1_simple_delay.html#a352d0ef4d2ca039a141f504eb1cfe7cf',1,'audio_tools::SimpleDelay']]],
-  ['is_5fencoded_5fdata_8',['is_encoded_data',['../classaudio__tools_1_1_v_s1053_config.html#aeb504f8c37385f2052480645403faae7',1,'audio_tools::VS1053Config']]]
+  ['invdelayincrement_7',['invDelayIncrement',['../classaudio__tools_1_1_simple_delay.html#a352d0ef4d2ca039a141f504eb1cfe7cf',1,'audio_tools::SimpleDelay']]]
 ];

@@ -13,9 +13,8 @@ var searchData=
   ['ringbuffer_3c_20effect_5ft_20_3e_10',['RingBuffer&lt; effect_t &gt;',['../classaudio__tools_1_1_ring_buffer.html',1,'audio_tools']]],
   ['ringbuffer_3c_20int16_5ft_20_3e_11',['RingBuffer&lt; int16_t &gt;',['../classaudio__tools_1_1_ring_buffer.html',1,'audio_tools']]],
   ['ringbuffer_3c_20uint8_5ft_20_3e_12',['RingBuffer&lt; uint8_t &gt;',['../classaudio__tools_1_1_ring_buffer.html',1,'audio_tools']]],
-  ['ringbufferstream_13',['RingBufferStream',['../classaudio__tools_1_1_ring_buffer_stream.html',1,'audio_tools']]],
-  ['rtppcmaudioinfo_14',['RTPPCMAudioInfo',['../classaudio__tools_1_1_r_t_p_p_c_m_audio_info.html',1,'audio_tools']]],
-  ['rtpstreampcminfo_15',['RTPStreamPCMInfo',['../classaudio__tools_1_1_r_t_p_stream_p_c_m_info.html',1,'audio_tools']]],
-  ['rtspsourceaudiostream_16',['RTSPSourceAudioStream',['../classaudio__tools_1_1_r_t_s_p_source_audio_stream.html',1,'audio_tools']]],
-  ['rtspsourcestream_17',['RTSPSourceStream',['../classaudio__tools_1_1_r_t_s_p_source_stream.html',1,'audio_tools']]]
+  ['rtppcmaudioinfo_13',['RTPPCMAudioInfo',['../classaudio__tools_1_1_r_t_p_p_c_m_audio_info.html',1,'audio_tools']]],
+  ['rtpstreampcminfo_14',['RTPStreamPCMInfo',['../classaudio__tools_1_1_r_t_p_stream_p_c_m_info.html',1,'audio_tools']]],
+  ['rtspsourceaudiostream_15',['RTSPSourceAudioStream',['../classaudio__tools_1_1_r_t_s_p_source_audio_stream.html',1,'audio_tools']]],
+  ['rtspsourcestream_16',['RTSPSourceStream',['../classaudio__tools_1_1_r_t_s_p_source_stream.html',1,'audio_tools']]]
 ];

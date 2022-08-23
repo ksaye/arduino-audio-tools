@@ -207,7 +207,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Config for MP34DT05 Microphone. Supported sample rates 16000, 41667, Supported bits_per_sample only 16.  <a href="structaudio__tools_1_1_audio_m_p34_d_t05_config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_audio_output_with_callback.html">AudioOutputWithCallback</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESP8266Audio AudioOutput class which stores the data in a temporary buffer. The buffer can be consumed e.g. by a callback function by calling <a class="el" href="classaudio__tools_1_1_buffered_stream.html#ad3fe86e57992349ca607af7b15eeb1d9" title="reads a byte - to be avoided">read()</a>;.  <a href="classaudio__tools_1_1_audio_output_with_callback.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESP8266Audio AudioOutput class which stores the data in a temporary buffer. The buffer can be consumed e.g. by a callback function by calling read();.  <a href="classaudio__tools_1_1_audio_output_with_callback.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_audio_player.html">AudioPlayer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements a simple audio player which supports the following commands:  <a href="classaudio__tools_1_1_audio_player.html#details">More...</a><br /></td></tr>
@@ -290,6 +290,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_blackman_nuttall.html">BlackmanNuttall</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classaudio__tools_1_1_blackman_nuttall.html" title="BlackmanNuttall FFT Window function.">BlackmanNuttall</a> FFT Window function.  <a href="classaudio__tools_1_1_blackman_nuttall.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_blocking_stream.html">BlockingStream</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements a blocking write where the write is blocking until all data has been written.  <a href="classaudio__tools_1_1_blocking_stream.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_boost.html">Boost</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classaudio__tools_1_1_boost.html" title="Boost AudioEffect.">Boost</a> <a class="el" href="classaudio__tools_1_1_audio_effect.html" title="Abstract Base class for Sound Effects.">AudioEffect</a>.  <a href="classaudio__tools_1_1_boost.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -297,7 +300,9 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class which is usfull ot provide incremental data access e.g. for EdgeImpulse which request data with an offset and length starting from 0 up to the buffer length, restarting at 0 again.  <a href="classaudio__tools_1_1_buffered_array.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_buffered_stream.html">BufferedStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Arduino <a class="el" href="class_stream.html">Stream</a> supports operations on single characters. This is usually not the best way to push audio information, but we will support it anyway - by using a buffer. On reads: if the buffer is empty it gets refilled.  <a href="classaudio__tools_1_1_buffered_stream.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_buffered_stream_t.html">BufferedStreamT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classaudio__tools_1_1_audio_stream.html" title="Base class for all Audio Streams. It support the boolean operator to test if the object is ready with...">AudioStream</a> class which stores the data in a temporary queue buffer. The queue can be consumed e.g. by a callback function by calling readBytes();.  <a href="classaudio__tools_1_1_buffered_stream_t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_buffered_task_stream.html">BufferedTaskStream</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A FreeRTOS task is filling the buffer from the indicated stream.  <a href="classaudio__tools_1_1_buffered_task_stream.html#details">More...</a><br /></td></tr>
@@ -307,9 +312,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_cached_volume_control.html">CachedVolumeControl</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">In order to optimize the processing time we cache the last input &amp; factor and recalculate the new factor only if the input has changed.  <a href="classaudio__tools_1_1_cached_volume_control.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_callback_buffered_stream.html">CallbackBufferedStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">AudioOutput class which stores the data in a temporary queue buffer. The queue can be consumed e.g. by a callback function by calling readBytes();.  <a href="classaudio__tools_1_1_callback_buffered_stream.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_callback_volume_control.html">CallbackVolumeControl</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provide the volume function as callback method: This is easy to use e.g together with a lamda function!  <a href="classaudio__tools_1_1_callback_volume_control.html#details">More...</a><br /></td></tr>
@@ -386,6 +388,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_decoder_n_o_p.html">DecoderNOP</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dummy Decoder which does nothing.  <a href="classaudio__tools_1_1_decoder_n_o_p.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_decoder_stream.html">DecoderStream</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides the functionality to read decoded data from a encoded data source. This class is less memory efficient then the <a class="el" href="classaudio__tools_1_1_encoded_audio_stream.html" title="A more natural Stream class to process encoded data (aac, wav, mp3...).">EncodedAudioStream</a> which writes decoded data to a final stream, but in some cases this is worth the price. If the buffer is too small you can increase it by calling the resize() method.  <a href="classaudio__tools_1_1_decoder_stream.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_default_guitar_channel.html">DefaultGuitarChannel</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Audio Processing Channel based on a Input <a class="el" href="class_stream.html">Stream</a> and an Audio Effects Chain. This can be used todo implement a Guitar Amplifier.  <a href="classaudio__tools_1_1_default_guitar_channel.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -430,9 +435,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_exponential_volume_control.html">ExponentialVolumeControl</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple exponentional volume control using the formula pow(2.0, input) - 1.0;.  <a href="classaudio__tools_1_1_exponential_volume_control.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_external_buffer_stream.html">ExternalBufferStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="class_stream.html">Stream</a> backed by a SingleBufferStream. We assume that the memory is externally allocated and that we can submit only full buffer records, which are then available for reading.  <a href="classaudio__tools_1_1_external_buffer_stream.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_faust_stream.html">FaustStream</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integration into Faust DSP see <a href="https://faust.grame.fr/">https://faust.grame.fr/</a> To generate code from faust, select src and cpp.  <a href="classaudio__tools_1_1_faust_stream.html#details">More...</a><br /></td></tr>
@@ -851,9 +853,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_ring_buffer.html">RingBuffer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements a typed Ringbuffer.  <a href="classaudio__tools_1_1_ring_buffer.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_ring_buffer_stream.html">RingBufferStream</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="class_stream.html">Stream</a> backed by a Ringbuffer. We can write to the end and read from the beginning of the stream.  <a href="classaudio__tools_1_1_ring_buffer_stream.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_r_t_p_p_c_m_audio_info.html">RTPPCMAudioInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">PCMInfo subclass which provides the audio information from the <a class="el" href="structaudio__tools_1_1_audio_base_info.html" title="Basic Audio information which drives e.g. I2S.">AudioBaseInfo</a> parameter.  <a href="classaudio__tools_1_1_r_t_p_p_c_m_audio_info.html#details">More...</a><br /></td></tr>
@@ -1297,6 +1296,11 @@ Enumerations</h2></td></tr>
 , <b>Receiver</b>
  }</td></tr>
 <tr class="separator:a80efcfd18fe2b46b3e8f9975cd0a0c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a8ae316943db14ed0b06b9e6757a9ee"><td class="memItemLeft" align="right" valign="top"><a id="a2a8ae316943db14ed0b06b9e6757a9ee" name="a2a8ae316943db14ed0b06b9e6757a9ee"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>VS1053Mode</b> { <b>ENCODED_MODE</b>
+, <b>PCM_MODE</b>
+, <b>MIDI_MODE</b>
+ }</td></tr>
+<tr class="separator:a2a8ae316943db14ed0b06b9e6757a9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>

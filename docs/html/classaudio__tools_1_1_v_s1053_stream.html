@@ -96,6 +96,8 @@ Inheritance diagram for audio_tools::VS1053Stream:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a54991485e71669c43fee56e56ba7c358"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_v_s1053_stream.html#a54991485e71669c43fee56e56ba7c358">available</a> () override</td></tr>
+<tr class="separator:a54991485e71669c43fee56e56ba7c358"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a930e79e72a33c02d9fbd7c7a79d2264f"><td class="memItemLeft" align="right" valign="top"><a id="a930e79e72a33c02d9fbd7c7a79d2264f" name="a930e79e72a33c02d9fbd7c7a79d2264f"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>balance</b> ()</td></tr>
 <tr class="memdesc:a930e79e72a33c02d9fbd7c7a79d2264f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the currenet balance setting (-1.0..1.0) <br /></td></tr>
@@ -111,9 +113,9 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>bass</b> ()</td></tr
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (<a class="el" href="classaudio__tools_1_1_v_s1053_config.html">VS1053Config</a> cfg)</td></tr>
 <tr class="memdesc:a96d8080c5b4d408cc89b804181bd03c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts with the indicated configuration. <br /></td></tr>
 <tr class="separator:a96d8080c5b4d408cc89b804181bd03c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0d835f828c6490f90c0af313ba39469"><td class="memItemLeft" align="right" valign="top"><a id="ae0d835f828c6490f90c0af313ba39469" name="ae0d835f828c6490f90c0af313ba39469"></a>
-<a class="el" href="classaudio__tools_1_1_v_s1053_config.html">VS1053Config</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultConfig</b> ()</td></tr>
-<tr class="separator:ae0d835f828c6490f90c0af313ba39469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd9f73f418dfad18a86f8b7777972604"><td class="memItemLeft" align="right" valign="top"><a id="abd9f73f418dfad18a86f8b7777972604" name="abd9f73f418dfad18a86f8b7777972604"></a>
+<a class="el" href="classaudio__tools_1_1_v_s1053_config.html">VS1053Config</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultConfig</b> (<a class="el" href="namespaceaudio__tools.html#a0d4e1fe2dd00b263250e9319bcc85946">RxTxMode</a> mode=TX_MODE)</td></tr>
+<tr class="separator:abd9f73f418dfad18a86f8b7777972604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85b7bd2f177b97892a7e03547ebf3b07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_v_s1053_stream.html#a85b7bd2f177b97892a7e03547ebf3b07">end</a> ()</td></tr>
 <tr class="memdesc:a85b7bd2f177b97892a7e03547ebf3b07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the processing and releases the memory.  <a href="classaudio__tools_1_1_v_s1053_stream.html#a85b7bd2f177b97892a7e03547ebf3b07">More...</a><br /></td></tr>
 <tr class="separator:a85b7bd2f177b97892a7e03547ebf3b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,6 +123,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (<a class="
 VS1053 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVS1053</b> ()</td></tr>
 <tr class="memdesc:ac0aa4361cf2b61f282b1c34c5f478cb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the VS1053 object <br /></td></tr>
 <tr class="separator:ac0aa4361cf2b61f282b1c34c5f478cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a6c3f2984402a12c6a19b9ae199f926"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classaudio__tools_1_1_v_s1053_stream.html#a6a6c3f2984402a12c6a19b9ae199f926">readBytes</a> (uint8_t *data, size_t len) override</td></tr>
+<tr class="separator:a6a6c3f2984402a12c6a19b9ae199f926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9206f52dfc94c3ce9615898133040e5"><td class="memItemLeft" align="right" valign="top"><a id="ae9206f52dfc94c3ce9615898133040e5" name="ae9206f52dfc94c3ce9615898133040e5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBalance</b> (float <a class="el" href="classaudio__tools_1_1_v_s1053_stream.html#a930e79e72a33c02d9fbd7c7a79d2264f">balance</a>)</td></tr>
 <tr class="memdesc:ae9206f52dfc94c3ce9615898133040e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusting the left and right volume balance, higher to enhance the right side, lower to enhance the left side. <br /></td></tr>
@@ -416,7 +420,7 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classaudio__tools_1_1_copy_encoder.html">CopyEncoder</a>&#160;</td><td class="memItemRight" valign="bottom"><b>copy</b></td></tr>
 <tr class="separator:a19bd5b8b297eadcfeb863639cef0de73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac61bda97be393ed2fbdf69fc1652146d"><td class="memItemLeft" align="right" valign="top"><a id="ac61bda97be393ed2fbdf69fc1652146d" name="ac61bda97be393ed2fbdf69fc1652146d"></a>
-<a class="el" href="classaudio__tools_1_1_v_s1053_base_stream.html">VS1053BaseStream</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>p_driver</b> =nullptr</td></tr>
+<a class="el" href="classaudio__tools_1_1_v_s1053_base_stream.html">VS1053BaseStream</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>p_driver</b> = nullptr</td></tr>
 <tr class="separator:ac61bda97be393ed2fbdf69fc1652146d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b43e14c9e39288e5c09eaf01e5eb7bf"><td class="memItemLeft" align="right" valign="top"><a id="a8b43e14c9e39288e5c09eaf01e5eb7bf" name="a8b43e14c9e39288e5c09eaf01e5eb7bf"></a>
 <a class="el" href="classaudio__tools_1_1_audio_encoder.html">AudioEncoder</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>p_encoder</b> = new <a class="el" href="classaudio__tools_1_1_w_a_v_encoder.html">WAVEncoder</a>()</td></tr>
@@ -444,6 +448,33 @@ unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>_timeout</b>
 <dl class="section author"><dt>Author</dt><dd>Phil Schatzmann </dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>GPLv3 </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a54991485e71669c43fee56e56ba7c358" name="a54991485e71669c43fee56e56ba7c358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54991485e71669c43fee56e56ba7c358">&#9670;&nbsp;</a></span>available()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int audio_tools::VS1053Stream::available </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classaudio__tools_1_1_audio_stream_x.html">audio_tools::AudioStreamX</a>.</p>
+
+</div>
+</div>
 <a id="a7a8f637940056101e435c796b5519e40" name="a7a8f637940056101e435c796b5519e40"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a8f637940056101e435c796b5519e40">&#9670;&nbsp;</a></span>begin()</h2>
 
@@ -499,6 +530,44 @@ unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>_timeout</b>
 <p>Stops the processing and releases the memory. </p>
 
 <p>Reimplemented from <a class="el" href="classaudio__tools_1_1_audio_stream.html">audio_tools::AudioStream</a>.</p>
+
+</div>
+</div>
+<a id="a6a6c3f2984402a12c6a19b9ae199f926" name="a6a6c3f2984402a12c6a19b9ae199f926"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a6c3f2984402a12c6a19b9ae199f926">&#9670;&nbsp;</a></span>readBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t audio_tools::VS1053Stream::readBytes </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classaudio__tools_1_1_audio_stream_x.html">audio_tools::AudioStreamX</a>.</p>
 
 </div>
 </div>
