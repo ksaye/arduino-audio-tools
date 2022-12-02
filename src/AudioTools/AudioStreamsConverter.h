@@ -535,6 +535,9 @@ class FormatConverterStream : public AudioStreamX {
           setSourceAudioInfo(print.audioInfo());  
           setStream(print);
         }
+        FormatConverterStream(AudioBaseInfo to){
+          setAudioInfo(to);
+        }
 
         void setStream(Stream &stream){
           p_stream = &stream;
@@ -554,10 +557,13 @@ class FormatConverterStream : public AudioStreamX {
             setSourceAudioInfo(from);
             return begin(to);
         }
-
         bool begin(AudioBaseInfo to){
           setAudioInfo(to);
           to_cfg = to;
+          return begin();
+        }
+
+        bool begin() override {
           if (p_stream!=nullptr){
             numberFormatConverter.setStream(*p_stream);
             channelFormatConverter.setStream(numberFormatConverter);

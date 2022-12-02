@@ -22,6 +22,18 @@
 namespace audio_tools {
 
 /**
+ * @brief Interface for classes where we can assign a destination or source
+ * @author Phil Schatzmann
+ * @copyright GPLv3
+ * 
+ */
+class StreamAssignable  {
+  public:
+    virtual void setStream(Stream&)=0;
+    virtual void setStream(Print&)=0;
+};
+
+/**
  * @brief Base class for all Audio Streams. It support the boolean operator to
  * test if the object is ready with data
  * @author Phil Schatzmann
@@ -972,7 +984,7 @@ struct VolumeStreamConfig : public AudioBaseInfo {
  * @author Phil Schatzmann
  * @copyright GPLv3
  */
-class VolumeStream : public AudioStreamX {
+class VolumeStream : public AudioStreamX, StreamAssignable {
     public:
         /// Default Constructor
         VolumeStream() = default;
@@ -992,13 +1004,20 @@ class VolumeStream : public AudioStreamX {
             setTarget(in);
         }
 
-        void setTarget(Print &out){
+        void setStream(Print &out) override{
             p_out = &out;
+        }
+        void setStream(Stream &in) override{
+            p_in = &in;
+            p_out = p_in;
+        }
+
+        void setTarget(Print &out){
+           setStream(out);
         }
         
         void setTarget(Stream &in){
-            p_in = &in;
-            p_out = p_in;
+           setStream(in);
         }
 
         VolumeStreamConfig defaultConfig() {

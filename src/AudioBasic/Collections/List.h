@@ -113,6 +113,16 @@ class List {
             for(auto &obj : iniList) 
   	    	    push_back(obj);
         } 
+
+        /// Returns the first element
+        T &front() {
+            return *begin();
+        }
+
+        /// Returns the last element
+        T &back() {
+            return *end();
+        }
         
         bool swap(List<T>&ref){
             List<T> tmp(*this);

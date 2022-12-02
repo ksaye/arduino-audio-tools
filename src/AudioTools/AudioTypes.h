@@ -25,6 +25,11 @@ enum TimeUnit {MS, US};
 struct AudioBaseInfo {
     AudioBaseInfo() = default;
     AudioBaseInfo(const AudioBaseInfo &) = default;
+    AudioBaseInfo(int sample_rate, int channels, int bps) {
+      this->sample_rate = sample_rate;
+      this->channels = channels;
+      this->bits_per_sample = bps;
+    }
     int sample_rate = 0;    // undefined
     int channels = 0;       // undefined
     int bits_per_sample=16; // we assume int16_t
