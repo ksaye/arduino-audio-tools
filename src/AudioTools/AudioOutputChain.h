@@ -19,42 +19,49 @@ public:
     AudioOutputChain() = default;
 
     // Constructor with a source us a AudioCopy
-    void from(AudioStream &input){
+    AudioOutputChain& from(AudioStream &input){
         p_input = &input;
         AudioPrint::setAudioInfo(input.audioInfo());
+        return *this;
     }
 
     // Constructor with a source which saves us a AudioCopy
-    void from(Stream &input, AudioBaseInfo cfg){
+    AudioOutputChain& from(Stream &input, AudioBaseInfo cfg){
         p_input = &input;
         AudioPrint::setAudioInfo(cfg);
+        return *this;
     }
 
-    void add(VolumeStream &out){
+    AudioOutputChain& convert(AudioStream &out){
         AudioStream *p_audio = &out;
         StreamAssignable *p_assign = (StreamAssignable *)p_audio;
         addList(new AudioOutputChainEntryStreamAssignable(p_audio, p_assign));
+        return *this;
     }
 
     /// Simple AudioPrint will be added to multiout
-    void add(AudioPrint &out){
+    AudioOutputChain& output(AudioPrint &out){
         multi_out.add(out);
         addMultiOut();
+        return *this;
     }
 
     /// Simple AudioStream will be added to multiout
-    void add(AudioStream &out){
+    AudioOutputChain& output(AudioStream &out){
         multi_out.add(out);
         addMultiOut();
+        return *this;
     }
 
     // add transforming stream
-    void reformat(AudioBaseInfo info){
+    AudioOutputChain&  reformat(AudioBaseInfo info){
         addList(new AudioOutputChainEntryFormatChange(info));
+        return *this;
     }
 
-    void add(FormatConverterStream &fc){
+    AudioOutputChain& convert(FormatConverterStream &fc){
         addList(new AudioOutputChainEntryFormatChange(fc.audioInfo()));
+        return *this;
     }
 
     virtual size_t write(const uint8_t *buffer, size_t size) override {
@@ -63,7 +70,7 @@ public:
     }
 
     /// starts the processing by linking 
-    void begin(){
+    bool begin(){
         // setup chain
         for (int i=0;i<list.size()-1;i++){
             if (list[i]->stream!=nullptr){
@@ -73,6 +80,7 @@ public:
             }
         }       
         setupCopy();
+        return true;
     }
 
     /// Optional copy - when source has been defined

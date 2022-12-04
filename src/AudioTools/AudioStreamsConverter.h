@@ -603,5 +603,64 @@ class FormatConverterStream : public AudioStreamX {
     ChannelFormatConverterStream channelFormatConverter;
 };
 
+/**
+ * @brief A stream to which we apply a subclass of BaseConverter
+ * @author Phil Schatzmann
+ * @copyright GPLv3
+ * @tparam T is subclass of BaseConverter<T>
+ */
+template<typename T>
+class ConverterStreamT : public AudioStreamX, StreamAssignable  {
+  public:
+    ConverterStreamT(T &converter) {
+      p_converter = &converter;
+    }
+    ConverterStreamT(Stream &stream, T &converter) {
+      setStream(stream);
+      p_converter = &converter;
+    }
+    ConverterStreamT(Print &print, T &converter) {
+      setStream(print);
+      p_converter = &converter;
+    }
+
+    void setStream(Stream &stream) override {
+      p_stream = &stream;
+      p_print = &stream;
+    }
+
+    void setStream(Print &print) override {
+      p_print = &print;
+    }
+
+    virtual size_t write(const uint8_t *data, size_t size) override { 
+      if (p_print==nullptr) return 0;
+      p_converter->convert(data, size);
+      return p_print->write(data, size);
+    }
+
+    size_t readBytes(uint8_t *data, size_t size) override {
+      if (p_stream==nullptr) return 0;
+      size_t result = p_stream->readBytes(data, size);
+      p_converter->convert(data, result);
+      return result;
+    }
+
+    virtual int available() override {
+      return p_stream==nullptr ? 0 : p_stream->available();
+    }
+
+    virtual int availableForWrite() override { 
+      return p_print==nullptr ? 0 : p_print->availableForWrite();
+    }
+
+  protected:
+    T *p_converter=nullptr;
+    Stream *p_stream=nullptr;
+    Print *p_print=nullptr;
+};
+
+/// @brief ConverterStream is ConverterStreamT<BaseConverter<int16_t>>
+using ConverterStream = ConverterStreamT<BaseConverter<int16_t>>;
 
 } // namespace
